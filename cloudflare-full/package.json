@@ -4,7 +4,7 @@
   "description": "Full Cusdis comment system on Cloudflare Workers with React",
   "main": "src/index.ts",
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">20.0.0",
     "npm": ">=10.0.0"
   },
   "scripts": {
