@@ -1,7 +1,6 @@
 {
   "name": "cusdis-cloudflare-full",
   "version": "1.0.0",
-  "packageManager": "npm@10.9.2",
   "description": "Full Cusdis comment system on Cloudflare Workers with React",
   "main": "src/index.ts",
   "engines": {
