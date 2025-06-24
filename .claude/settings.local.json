@@ -10,7 +10,9 @@
       "Bash(npx pnpm install:*)",
       "Bash(openssl rand:*)",
       "Bash(ls:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npm run deploy:*)",
+      "Bash(npx wrangler:*)"
     ],
     "deny": []
   }
