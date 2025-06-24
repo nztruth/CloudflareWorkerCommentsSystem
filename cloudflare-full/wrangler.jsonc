@@ -34,10 +34,8 @@
   ],
   "vars": {
     "SITE_URL": "https://your-worker.your-subdomain.workers.dev",
-    "FROM_EMAIL": "noreply@yourdomain.com"
-  },
-  "secrets": [
-    "JWT_SECRET",
-    "SENDGRID_API_KEY"
-  ]
+    "FROM_EMAIL": "noreply@yourdomain.com",
+    "JWT_SECRET": "",
+    "SENDGRID_API_KEY": ""
+  }
 }

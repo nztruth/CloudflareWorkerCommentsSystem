@@ -9,8 +9,9 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "build": "vite build && wrangler deploy --dry-run",
-    "deploy": "vite build && wrangler deploy",
+    "build": "vite build",
+    "deploy": "npm run build && wrangler deploy",
+    "pages:build": "npm run build",
     "db:init": "wrangler d1 execute cusdis-comments --file=./schema.sql",
     "db:migrate": "wrangler d1 execute cusdis-comments --file=./schema.sql"
   },
