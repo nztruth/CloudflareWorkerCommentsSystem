@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "build": "vite build",
-    "deploy": "if not exist dist mkdir dist && echo temp > dist\\index.html && wrangler deploy",
+    "deploy": "mkdir -p dist && echo temp > dist/index.html && wrangler deploy",
     "deploy-full": "vite build && wrangler deploy",
     "pages:build": "vite build && npx wrangler deploy",
     "db:init": "npx wrangler d1 execute cusdis-comments --file=./schema.sql",
