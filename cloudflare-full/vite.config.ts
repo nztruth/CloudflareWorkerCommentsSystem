@@ -3,22 +3,12 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  root: 'frontend',
   build: {
-    outDir: 'dist',
-    rollupOptions: {
-      input: {
-        main: 'frontend/index.html',
-        dashboard: 'frontend/dashboard/index.html',
-        login: 'frontend/login/index.html'
-      },
-      output: {
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
-      }
-    }
+    outDir: '../dist',
+    emptyOutDir: true
   },
-  publicDir: 'frontend/public',
+  publicDir: 'public',
   server: {
     proxy: {
       '/api': {
