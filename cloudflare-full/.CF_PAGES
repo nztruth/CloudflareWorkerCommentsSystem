@@ -1,0 +1,3 @@
+NPM_FLAGS="--prefer-offline --no-audit"
+NODE_VERSION="22.16.0"
+PACKAGE_MANAGER="npm"
