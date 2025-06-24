@@ -4,7 +4,10 @@
       "Bash(cp:*)",
       "Bash(npm install:*)",
       "Bash(rm:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(pnpm import:*)",
+      "Bash(npx pnpm import:*)",
+      "Bash(npx pnpm install:*)"
     ],
     "deny": []
   }
