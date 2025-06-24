@@ -8,7 +8,9 @@
       "Bash(pnpm import:*)",
       "Bash(npx pnpm import:*)",
       "Bash(npx pnpm install:*)",
-      "Bash(openssl rand:*)"
+      "Bash(openssl rand:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }

@@ -12,8 +12,8 @@
     "build": "vite build",
     "deploy": "vite build && wrangler deploy",
     "pages:build": "vite build && npx wrangler deploy",
-    "db:init": "wrangler d1 execute cusdis-comments --file=./schema.sql",
-    "db:migrate": "wrangler d1 execute cusdis-comments --file=./schema.sql"
+    "db:init": "npx wrangler d1 execute cusdis-comments --file=./schema.sql",
+    "db:migrate": "npx wrangler d1 execute cusdis-comments --file=./schema.sql"
   },
   "dependencies": {
     "hono": "^4.6.0",

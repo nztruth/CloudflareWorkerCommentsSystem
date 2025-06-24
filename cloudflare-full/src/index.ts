@@ -48,7 +48,17 @@ app.get('*', async (c) => {
     return await handleWidgetRoutes(c);
   }
   
-  // Serve static assets
+  // For SPA routing, serve index.html for frontend routes
+  const frontendRoutes = ['/dashboard', '/login', '/projects', '/getting-start', '/forbidden', '/error'];
+  const isFrontendRoute = frontendRoutes.some(route => url.pathname.startsWith(route)) || url.pathname === '/';
+  
+  if (isFrontendRoute) {
+    // Serve index.html for SPA routes
+    const indexRequest = new Request(new URL('/index.html', c.req.url).toString(), c.req.raw);
+    return c.env.ASSETS.fetch(indexRequest);
+  }
+  
+  // Serve static assets (CSS, JS, images, etc.)
   return c.env.ASSETS.fetch(c.req.raw);
 });
 
