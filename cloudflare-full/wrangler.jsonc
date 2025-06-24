@@ -33,9 +33,9 @@
     }
   ],
   "vars": {
-    "SITE_URL": "https://your-worker.your-subdomain.workers.dev",
+    "SITE_URL": "https://commentssystem.arie-f50.workers.dev",
     "FROM_EMAIL": "noreply@yourdomain.com",
-    "JWT_SECRET": "",
+    "JWT_SECRET": "6c021dc7e15e87ee2784a233e03ffc90c777099fd845a14c5487bb16631b652f0d5a793cf0053b619143aa5f00aaefe1936dabec4fe69b5a0efdac4265716832",
     "SENDGRID_API_KEY": ""
   }
 }
