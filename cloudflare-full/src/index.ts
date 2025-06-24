@@ -48,6 +48,37 @@ app.get('*', async (c) => {
     return await handleWidgetRoutes(c);
   }
   
+  // Handle frontend assets manually if ASSETS binding fails
+  if (url.pathname.startsWith('/assets/')) {
+    const assetPath = url.pathname.replace('/assets/', '');
+    
+    if (assetPath === 'index-4ed4436d.js') {
+      // Return the built JS file
+      const jsContent = await fetch(new URL('../dist/assets/index-4ed4436d.js', import.meta.url));
+      if (jsContent.ok) {
+        return new Response(await jsContent.text(), {
+          headers: {
+            'Content-Type': 'application/javascript',
+            'Cache-Control': 'public, max-age=31536000',
+          },
+        });
+      }
+    }
+    
+    if (assetPath === 'index-4efb08a1.css') {
+      // Return the built CSS file
+      const cssContent = await fetch(new URL('../dist/assets/index-4efb08a1.css', import.meta.url));
+      if (cssContent.ok) {
+        return new Response(await cssContent.text(), {
+          headers: {
+            'Content-Type': 'text/css',
+            'Cache-Control': 'public, max-age=31536000',
+          },
+        });
+      }
+    }
+  }
+  
   // Try to serve static assets first
   try {
     const response = await c.env.ASSETS.fetch(c.req.raw);
@@ -63,50 +94,20 @@ app.get('*', async (c) => {
   const isFrontendRoute = frontendRoutes.some(route => url.pathname.startsWith(route)) || url.pathname === '/';
   
   if (isFrontendRoute) {
-    // Serve a basic HTML page since ASSETS binding isn't working
+    // Serve the actual built React app instead of fallback HTML
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cusdis - Lightweight Comment System</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .container { text-align: center; margin-top: 50px; }
-        .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 10px; }
-        .btn:hover { background: #0056b3; }
-        .code { background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 20px 0; }
-    </style>
+    <title>Cusdis - Lightweight, privacy-first, open-source comment system</title>
+    <link rel="icon" href="/favicon.ico" />
+  <script type="module" crossorigin src="/assets/index-4ed4436d.js"></script>
+  <link rel="stylesheet" href="/assets/index-4efb08a1.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🗨️ Cusdis Comment System</h1>
-        <p>Your comment system is successfully deployed!</p>
-        
-        <h2>Next Steps:</h2>
-        <ol style="text-align: left; max-width: 600px; margin: 0 auto;">
-            <li><strong>Initialize Database:</strong> Run the command below to set up your database tables</li>
-            <li><strong>Create Account:</strong> Use the API endpoints to create your admin account</li>
-            <li><strong>Embed Widget:</strong> Add the widget script to your website</li>
-        </ol>
-        
-        <h3>1. Initialize Database</h3>
-        <div class="code">
-            npx wrangler d1 execute cusdis-comments --file=./schema.sql
-        </div>
-        
-        <h3>2. API Endpoints</h3>
-        <a href="/api/auth/register" class="btn">Register API</a>
-        <a href="/js/cusdis.es.js" class="btn">Widget Script</a>
-        
-        <h3>3. Embed Widget</h3>
-        <div class="code" style="text-align: left;">
-&lt;script defer src="${c.env.SITE_URL}/js/cusdis.es.js"&gt;&lt;/script&gt;<br>
-&lt;div id="cusdis_thread" data-app-id="YOUR_APP_ID" data-page-id="YOUR_PAGE_ID"&gt;&lt;/div&gt;
-        </div>
-        
-        <p><strong>Worker URL:</strong> ${c.env.SITE_URL}</p>
-    </div>
+    <div id="root"></div>
+    
 </body>
 </html>`;
     

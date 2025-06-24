@@ -16,7 +16,9 @@
       "Bash(node:*)",
       "Bash(npx vite:*)",
       "Bash(./node_modules/.bin/wrangler deploy)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npm --version)",
+      "Bash(npx:*)"
     ],
     "deny": []
   }
