@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cusdis Comments</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: transparent;
+        }
+
+        .cusdis-container {
+            padding: 20px;
+            max-width: 100%;
+        }
+
+        .cusdis-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comment-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .comment-form {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007cba;
+            box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background: #007cba;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #006ba1;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .comments-list {
+            margin-top: 30px;
+        }
+
+        .comment {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: white;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .comment-author.moderator {
+            color: #007cba;
+        }
+
+        .comment-date {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .comment-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: #007cba;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-link:hover {
+            color: #006ba1;
+        }
+
+        .replies {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+
+        .reply-form {
+            margin-left: 30px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            color: #155724;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* Dark theme */
+        .dark {
+            background: #1a1a1a;
+            color: #e4e4e4;
+        }
+
+        .dark .comment-form,
+        .dark .comment,
+        .dark .reply-form {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+
+        .dark .form-control {
+            background: #333;
+            color: #e4e4e4;
+            border-color: #404040;
+        }
+
+        .dark .form-control:focus {
+            border-color: #007cba;
+        }
+
+        .dark .cusdis-header {
+            border-color: #404040;
+        }
+
+        .dark .comment-count {
+            color: #e4e4e4;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .replies {
+                margin-left: 15px;
+            }
+
+            .reply-form {
+                margin-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cusdis-container">
+        <div class="cusdis-header">
+            <div class="comment-count">Loading comments...</div>
+        </div>
+
+        <div class="comment-form">
+            <form id="comment-form">
+                <div class="form-group">
+                    <label for="content">Comment *</label>
+                    <textarea id="content" name="content" class="form-control" required placeholder="Write your comment here..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nickname">Name *</label>
+                        <input type="text" id="nickname" name="nickname" class="form-control" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com (optional)">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="acceptNotify" name="acceptNotify">
+                    <label for="acceptNotify">Notify me when someone replies</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+        </div>
+
+        <div id="messages"></div>
+        <div id="comments-container">
+            <div class="loading">Loading comments...</div>
+        </div>
+    </div>
+
+    <script>
+        class CusdisWidget {
+            constructor() {
+                this.params = this.getURLParams();
+                this.currentPage = 1;
+                this.isSubmitting = false;
+                this.init();
+            }
+
+            getURLParams() {
+                const params = new URLSearchParams(window.location.search);
+                return {
+                    appId: params.get('appId'),
+                    pageId: params.get('pageId') || window.location.href,
+                    pageUrl: params.get('pageUrl') || window.location.href,
+                    pageTitle: params.get('pageTitle') || document.title,
+                    theme: params.get('theme') || 'light'
+                };
+            }
+
+            init() {
+                // Apply theme
+                if (this.params.theme === 'dark') {
+                    document.body.classList.add('dark');
+                }
+
+                // Setup form submission
+                document.getElementById('comment-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.submitComment();
+                });
+
+                // Load comments
+                this.loadComments();
+
+                // Auto-resize iframe
+                this.resizeIframe();
+                const observer = new MutationObserver(() => this.resizeIframe());
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+
+            async loadComments(page = 1) {
+                try {
+                    const url = `/api/open/comments?appId=${this.params.appId}&pageId=${encodeURIComponent(this.params.pageId)}&page=${page}`;
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Timezone-Offset': new Date().getTimezoneOffset().toString()
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to load comments');
+                    }
+
+                    const result = await response.json();
+                    this.renderComments(result.data);
+                    this.currentPage = page;
+                } catch (error) {
+                    console.error('Error loading comments:', error);
+                    this.showError('Failed to load comments. Please try again.');
+                }
+            }
+
+            renderComments(data) {
+                const { commentCount, data: comments } = data;
+                
+                // Update comment count
+                document.querySelector('.comment-count').textContent = 
+                    commentCount === 0 ? 'No comments yet' :
+                    commentCount === 1 ? '1 comment' : `${commentCount} comments`;
+
+                const container = document.getElementById('comments-container');
+                
+                if (comments.length === 0) {
+                    container.innerHTML = '<div class="loading">No comments yet. Be the first to comment!</div>';
+                    this.resizeIframe();
+                    return;
+                }
+
+                const commentsHtml = comments.map(comment => this.renderComment(comment)).join('');
+                
+                container.innerHTML = `
+                    <div class="comments-list">
+                        ${commentsHtml}
+                    </div>
+                `;
+
+                // Setup reply buttons
+                container.querySelectorAll('.btn-reply').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const commentId = e.target.dataset.commentId;
+                        this.toggleReplyForm(commentId);
+                    });
+                });
+
+                this.resizeIframe();
+            }
+
+            renderComment(comment) {
+                const repliesHtml = comment.replies.data.length > 0 ? 
+                    `<div class="replies">${comment.replies.data.map(reply => this.renderComment(reply)).join('')}</div>` : '';
+
+                const authorClass = comment.moderator_id ? 'comment-author moderator' : 'comment-author';
+                const authorName = comment.moderator?.display_name || comment.by_nickname;
+
+                return `
+                    <div class="comment" data-comment-id="${comment.id}">
+                        <div class="comment-header">
+                            <span class="${authorClass}">${authorName}</span>
+                            <span class="comment-date">${comment.parsedCreatedAt}</span>
+                        </div>
+                        <div class="comment-content">${comment.parsedContent}</div>
+                        <div class="comment-actions">
+                            <button class="btn-link btn-reply" data-comment-id="${comment.id}">Reply</button>
+                        </div>
+                        <div class="reply-form" id="reply-form-${comment.id}">
+                            <form class="reply-form-inner" data-parent-id="${comment.id}">
+                                <div class="form-group">
+                                    <textarea name="content" class="form-control" placeholder="Write your reply..." required></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <input type="text" name="nickname" class="form-control" placeholder="Your name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" name="email" class="form-control" placeholder="Email (optional)">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Reply</button>
+                                <button type="button" class="btn-link" onclick="this.closest('.reply-form').style.display='none'">Cancel</button>
+                            </form>
+                        </div>
+                        ${repliesHtml}
+                    </div>
+                `;
+            }
+
+            toggleReplyForm(commentId) {
+                const form = document.getElementById(`reply-form-${commentId}`);
+                const isVisible = form.style.display === 'block';
+                
+                // Hide all reply forms
+                document.querySelectorAll('.reply-form').forEach(f => f.style.display = 'none');
+                
+                if (!isVisible) {
+                    form.style.display = 'block';
+                    
+                    // Setup form submission
+                    const formElement = form.querySelector('.reply-form-inner');
+                    formElement.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.submitReply(formElement);
+                    });
+                    
+                    this.resizeIframe();
+                }
+            }
+
+            async submitComment() {
+                if (this.isSubmitting) return;
+                
+                const form = document.getElementById('comment-form');
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                if (!data.content.trim() || !data.nickname.trim()) {
+                    this.showError('Please fill in all required fields.');
+                    return;
+                }
+
+                this.isSubmitting = true;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Posting...';
+
+                try {
+                    const response = await fetch('/api/open/comments', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            appId: this.params.appId,
+                            pageId: this.params.pageId,
+                            pageUrl: this.params.pageUrl,
+                            pageTitle: this.params.pageTitle,
+                            content: data.content,
+                            nickname: data.nickname,
+                            email: data.email,
+                            acceptNotify: data.acceptNotify === 'on'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to post comment');
+                    }
+
+                    this.showSuccess('Comment posted successfully! It will appear after moderation.');
+                    form.reset();
+                    this.loadComments(); // Reload to show updated count
+                } catch (error) {
+                    console.error('Error posting comment:', error);
+                    this.showError('Failed to post comment. Please try again.');
+                } finally {
+                    this.isSubmitting = false;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Post Comment';
+                }
+            }
+
+            async submitReply(form) {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+                const parentId = form.dataset.parentId;
+
+                if (!data.content.trim() || !data.nickname.trim()) {
+                    this.showError('Please fill in all required fields.');
+                    return;
+                }
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Posting...';
+
+                try {
+                    const response = await fetch('/api/open/comments', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            appId: this.params.appId,
+                            pageId: this.params.pageId,
+                            pageUrl: this.params.pageUrl,
+                            pageTitle: this.params.pageTitle,
+                            content: data.content,
+                            nickname: data.nickname,
+                            email: data.email,
+                            parentId: parentId
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to post reply');
+                    }
+
+                    this.showSuccess('Reply posted successfully! It will appear after moderation.');
+                    form.reset();
+                    form.closest('.reply-form').style.display = 'none';
+                    this.loadComments(); // Reload to show updated count
+                } catch (error) {
+                    console.error('Error posting reply:', error);
+                    this.showError('Failed to post reply. Please try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Post Reply';
+                }
+            }
+
+            showMessage(message, type) {
+                const container = document.getElementById('messages');
+                container.innerHTML = `<div class="${type}">${message}</div>`;
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    this.resizeIframe();
+                }, 5000);
+                this.resizeIframe();
+            }
+
+            showError(message) {
+                this.showMessage(message, 'error');
+            }
+
+            showSuccess(message) {
+                this.showMessage(message, 'success');
+            }
+
+            resizeIframe() {
+                setTimeout(() => {
+                    const height = document.body.scrollHeight;
+                    window.parent.postMessage({
+                        type: 'cusdis-resize',
+                        height: height
+                    }, '*');
+                }, 100);
+            }
+        }
+
+        // Initialize widget
+        const widget = new CusdisWidget();
+    </script>
+</body>
+</html>

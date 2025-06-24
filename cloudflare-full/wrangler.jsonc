@@ -1,0 +1,43 @@
+{
+  "name": "cusdis-comments-full",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-03-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+    "directory": "./dist/",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cusdis-comments",
+      "database_id": "e7632a77-efd7-4c1f-9ae0-29d86c32bcf0"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "e007be092f224e678d2eccb9e7a79549",
+      "preview_id": "e007be092f224e678d2eccb9e7a79549"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "cusdis-uploads"
+    }
+  ],
+  "vars": {
+    "SITE_URL": "https://your-worker.your-subdomain.workers.dev",
+    "FROM_EMAIL": "noreply@yourdomain.com"
+  },
+  "secrets": [
+    "JWT_SECRET",
+    "SENDGRID_API_KEY"
+  ]
+}
