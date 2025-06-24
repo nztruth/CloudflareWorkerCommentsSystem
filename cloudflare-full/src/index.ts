@@ -53,13 +53,62 @@ app.get('*', async (c) => {
   const isFrontendRoute = frontendRoutes.some(route => url.pathname.startsWith(route)) || url.pathname === '/';
   
   if (isFrontendRoute) {
-    // Serve index.html for SPA routes
-    const indexRequest = new Request(new URL('/index.html', c.req.url).toString(), c.req.raw);
-    return c.env.ASSETS.fetch(indexRequest);
+    // Serve a basic HTML page since ASSETS binding isn't working
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cusdis - Lightweight Comment System</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { text-align: center; margin-top: 50px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 10px; }
+        .btn:hover { background: #0056b3; }
+        .code { background: #f5f5f5; padding: 10px; border-radius: 4px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗨️ Cusdis Comment System</h1>
+        <p>Your comment system is successfully deployed!</p>
+        
+        <h2>Next Steps:</h2>
+        <ol style="text-align: left; max-width: 600px; margin: 0 auto;">
+            <li><strong>Initialize Database:</strong> Run the command below to set up your database tables</li>
+            <li><strong>Create Account:</strong> Use the API endpoints to create your admin account</li>
+            <li><strong>Embed Widget:</strong> Add the widget script to your website</li>
+        </ol>
+        
+        <h3>1. Initialize Database</h3>
+        <div class="code">
+            npx wrangler d1 execute cusdis-comments --file=./schema.sql
+        </div>
+        
+        <h3>2. API Endpoints</h3>
+        <a href="/api/auth/register" class="btn">Register API</a>
+        <a href="/js/cusdis.es.js" class="btn">Widget Script</a>
+        
+        <h3>3. Embed Widget</h3>
+        <div class="code" style="text-align: left;">
+&lt;script defer src="${c.env.SITE_URL}/js/cusdis.es.js"&gt;&lt;/script&gt;<br>
+&lt;div id="cusdis_thread" data-app-id="YOUR_APP_ID" data-page-id="YOUR_PAGE_ID"&gt;&lt;/div&gt;
+        </div>
+        
+        <p><strong>Worker URL:</strong> ${c.env.SITE_URL}</p>
+    </div>
+</body>
+</html>`;
+    
+    return c.html(html);
   }
   
-  // Serve static assets (CSS, JS, images, etc.)
-  return c.env.ASSETS.fetch(c.req.raw);
+  // Try to serve static assets, fallback to 404
+  try {
+    return c.env.ASSETS.fetch(c.req.raw);
+  } catch (error) {
+    return c.notFound();
+  }
 });
 
 // Widget routes
