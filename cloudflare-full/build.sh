@@ -1,11 +1,18 @@
 #!/bin/bash
+set -e
 
-# Force npm usage and install dependencies
-echo "Using npm for package management..."
-npm ci
+echo "🔧 Forcing npm usage..."
 
-# Build the frontend
-echo "Building frontend..."
+# Remove any pnpm files if they exist
+rm -f pnpm-lock.yaml
+rm -f .pnpmfile.cjs
+
+# Ensure we're using npm
+echo "📦 Installing dependencies with npm..."
+npm install --legacy-peer-deps
+
+# Build the project
+echo "🏗️ Building project..."
 npm run build
 
-echo "Build complete!"
+echo "✅ Build complete!"

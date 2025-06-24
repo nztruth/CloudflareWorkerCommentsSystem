@@ -1,9 +1,9 @@
 [build]
-command = "npm install --legacy-peer-deps && npm run build"
+command = "bash build.sh"
 output = "dist"
 node_version = "18"
 
 [build.environment]
 NODE_VERSION = "18.19.1"
-NPM_CONFIG_LEGACY_PEER_DEPS = "true"
-NPM_CONFIG_FUND = "false"
+USE_NPM = "true"
+SKIP_DEPENDENCY_INSTALL = "true"
