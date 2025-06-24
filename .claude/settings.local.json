@@ -18,7 +18,8 @@
       "Bash(./node_modules/.bin/wrangler deploy)",
       "Bash(npm run dev:*)",
       "Bash(npm --version)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "WebFetch(domain:commentssystem.arie-f50.workers.dev)"
     ],
     "deny": []
   }
