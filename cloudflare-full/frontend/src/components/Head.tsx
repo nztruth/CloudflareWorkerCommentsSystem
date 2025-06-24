@@ -19,3 +19,5 @@ export function Head({
     </Helmet>
   );
 }
+
+export default Head;
