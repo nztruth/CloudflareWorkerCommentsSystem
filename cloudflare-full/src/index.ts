@@ -48,41 +48,12 @@ app.get('*', async (c) => {
     return await handleWidgetRoutes(c);
   }
   
-  // Handle frontend assets manually if ASSETS binding fails
-  if (url.pathname.startsWith('/assets/')) {
-    const assetPath = url.pathname.replace('/assets/', '');
-    
-    if (assetPath === 'index-4ed4436d.js') {
-      // Return the built JS file
-      const jsContent = await fetch(new URL('../dist/assets/index-4ed4436d.js', import.meta.url));
-      if (jsContent.ok) {
-        return new Response(await jsContent.text(), {
-          headers: {
-            'Content-Type': 'application/javascript',
-            'Cache-Control': 'public, max-age=31536000',
-          },
-        });
-      }
-    }
-    
-    if (assetPath === 'index-4efb08a1.css') {
-      // Return the built CSS file
-      const cssContent = await fetch(new URL('../dist/assets/index-4efb08a1.css', import.meta.url));
-      if (cssContent.ok) {
-        return new Response(await cssContent.text(), {
-          headers: {
-            'Content-Type': 'text/css',
-            'Cache-Control': 'public, max-age=31536000',
-          },
-        });
-      }
-    }
-  }
-  
-  // Try to serve static assets first
+  // Try to serve static assets first with better error handling
   try {
     const response = await c.env.ASSETS.fetch(c.req.raw);
-    if (response.status !== 404) {
+    console.log('ASSETS response status:', response.status, 'for path:', url.pathname);
+    // Serve any successful response, not just non-404s
+    if (response.status < 500) {
       return response;
     }
   } catch (error) {
