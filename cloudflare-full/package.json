@@ -10,8 +10,8 @@
   "scripts": {
     "dev": "wrangler dev",
     "build": "vite build",
-    "deploy": "npm run build && wrangler deploy",
-    "pages:build": "npm run build",
+    "deploy": "vite build && wrangler deploy",
+    "pages:build": "vite build && npx wrangler deploy",
     "db:init": "wrangler d1 execute cusdis-comments --file=./schema.sql",
     "db:migrate": "wrangler d1 execute cusdis-comments --file=./schema.sql"
   },
