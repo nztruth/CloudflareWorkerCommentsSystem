@@ -1,0 +1,10 @@
+/js/*
+  Cache-Control: public, max-age=86400
+  Content-Type: application/javascript
+
+/api/*
+  Cache-Control: no-cache
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
