@@ -48,6 +48,16 @@ app.get('*', async (c) => {
     return await handleWidgetRoutes(c);
   }
   
+  // Try to serve static assets first
+  try {
+    const response = await c.env.ASSETS.fetch(c.req.raw);
+    if (response.status !== 404) {
+      return response;
+    }
+  } catch (error) {
+    console.log('Assets fetch failed:', error);
+  }
+  
   // For SPA routing, serve index.html for frontend routes
   const frontendRoutes = ['/dashboard', '/login', '/projects', '/getting-start', '/forbidden', '/error'];
   const isFrontendRoute = frontendRoutes.some(route => url.pathname.startsWith(route)) || url.pathname === '/';
@@ -103,12 +113,7 @@ app.get('*', async (c) => {
     return c.html(html);
   }
   
-  // Try to serve static assets, fallback to 404
-  try {
-    return c.env.ASSETS.fetch(c.req.raw);
-  } catch (error) {
-    return c.notFound();
-  }
+  return c.notFound();
 });
 
 // Widget routes
