@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Full Cusdis comment system on Cloudflare Workers with React",
   "main": "src/index.ts",
-  "packageManager": "npm@9.2.0",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
